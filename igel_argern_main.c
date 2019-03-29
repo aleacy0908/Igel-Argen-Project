@@ -7,6 +7,10 @@
 #define BOARD_ROWS 6
 #define BOARD_COLS 9
 
+enum colour {
+    RED, BLU, GREEN, YELLOW, PINK, ORANGE
+};
+
 typedef struct Token
 {
     unsigned int coord[2]; //(row,column) -> e.g (0,2)
@@ -23,6 +27,13 @@ typedef struct Tile
     
 } Tile;
 
+typedef struct Player
+{
+    enum colour col;
+    unsigned int score;
+    Token p_tokens[4];
+} Player;
+
 void PRINT_BOARD();
 void NEW_BOARD();
 
@@ -36,8 +47,42 @@ int main(int argc, char** argv) {
     
     srand(time(NULL)); //Sets up the random generator
     
+    int num_players;
+    int i = 0;
+    
+    
     NEW_BOARD();
     
+    Player p;
+    
+    p.col = BLU;
+    p.score = 0;
+    
+    printf("How many players will be playing?: ");
+    scanf("%d", &num_players);
+    Player players[num_players];
+    
+    printf("Colours: Red, Blue, Green, Yellow, Pink, Orange");
+    printf("Enter the first letter of the colour you would like");
+    char c;
+    while(i != num_players)
+    {
+        printf("What colour would you like to be player %d", i);
+        scanf("%c", &c);
+        
+        switch (c)
+        {
+            case 'R' :
+                
+                break;
+                
+            default:
+                printf("You entered the wrong letter, try again");
+                continue;
+                break;
+        }
+        i++;
+    }
     
 }
 
