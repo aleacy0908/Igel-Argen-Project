@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 
 #define TOTAL_TOKENS 24
 #define BOARD_ROWS 6
 #define BOARD_COLS 9
 
-enum colour {
+enum COLOUR {
     RED, BLU, GREEN, YELLOW, PINK, ORANGE
 };
+
+int col_chars[6] = {'R', 'B', 'Y', 'G', 'P', 'O'};
 
 typedef struct Token
 {
@@ -29,13 +32,14 @@ typedef struct Tile
 
 typedef struct Player
 {
-    enum colour col;
+    enum COLOUR team_col;
     unsigned int score;
     Token p_tokens[4];
 } Player;
 
 void PRINT_BOARD();
 void NEW_BOARD();
+void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[]);
 
 int roll_die();
 
@@ -47,42 +51,18 @@ int main(int argc, char** argv) {
     
     srand(time(NULL)); //Sets up the random generator
     
-    int num_players;
+    unsigned int num_players;
     int i = 0;
     
     
     NEW_BOARD();
     
-    Player p;
-    
-    p.col = BLU;
-    p.score = 0;
-    
     printf("How many players will be playing?: ");
     scanf("%d", &num_players);
+    
     Player players[num_players];
     
-    printf("Colours: Red, Blue, Green, Yellow, Pink, Orange");
-    printf("Enter the first letter of the colour you would like");
-    char c;
-    while(i != num_players)
-    {
-        printf("What colour would you like to be player %d", i);
-        scanf("%c", &c);
-        
-        switch (c)
-        {
-            case 'R' :
-                
-                break;
-                
-            default:
-                printf("You entered the wrong letter, try again");
-                continue;
-                break;
-        }
-        i++;
-    }
+    CHOOSE_COLOURS(num_players, players);
     
 }
 
@@ -112,4 +92,95 @@ void NEW_BOARD()
 void PRINT_BOARD()
 {
     
+}
+
+void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[])
+{
+    char col_inputs[6][20] = {"R = Red\n","B = Blue\n","Y = Yellow\n","G = Green\n","P = Pink\n","O = Orange\n"};
+    
+    bool invalid_input = false;
+    
+    for(int i = 0; i < num_players; i++)
+    {
+        /* 
+         Print Colour Options
+         -> We want one unique colour for each individual player,
+            thus we get rid of the option for a colour in the 
+            switch statement below after it's been selected
+         -> Also, if the user inputs an invalid character,
+            he/she is asked to try again
+        */
+        
+        if(invalid_input) 
+        {
+            printf("INVALID INPUT, TRY AGAIN\n");
+            invalid_input = false;
+        }
+        else
+        {
+            printf("Player %d, Which Colour Would You Like?\n", i+1);
+        }
+        
+        for(int j = 0; j < 6; j++)
+        {
+            printf("%s",col_inputs[j]);
+        }
+        
+        //Input Player Colour
+        char c;
+        scanf(" %c", &c);
+        
+        /*
+         Search for the colour and if
+         none is found then the input
+         was invalid
+         */
+        
+        bool valid_colour = false;
+        int num;
+        
+        for(int i = 0; i < 6; i++)
+        {
+            if(c == col_chars[i])
+            {
+                num = i;
+                valid_colour = true;
+                break;
+            }
+        }
+        
+        if(!valid_colour)
+        {
+            invalid_input = true;
+            i -= 1;
+        }
+        else
+        {
+            switch(c)
+            {
+                case 'R':
+                    player_arr[i].team_col = RED;
+                    break;
+                case 'B':
+                    player_arr[i].team_col = BLU;
+                    break;
+                    
+                case 'Y':
+                    player_arr[i].team_col = YELLOW;
+                    break;
+                    
+                case 'G':
+                    player_arr[i].team_col = GREEN;
+                    
+                case 'P':
+                    player_arr[i].team_col = PINK;
+                    
+                case 'O':
+                    player_arr[i].team_col = ORANGE;
+            }
+            
+            strcpy(col_inputs[num], ""); //Get rid of the option for this colour
+        }
+        
+    }
 }
