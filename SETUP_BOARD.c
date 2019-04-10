@@ -1,6 +1,5 @@
 #include "SETUP_BOARD.h"
 
-
 void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars[])
 {
     char col_inputs[6][20] = {"R = Red\n","B = Blue\n","Y = Yellow\n","G = Green\n","P = Pink\n","O = Orange\n"};
@@ -88,3 +87,83 @@ void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars
         }
     }
 }
+
+void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
+    printf("                THE BOARD\n");
+    for(int i =0; i < BOARD_ROWS; i++){
+        
+        //prints an horizontal line
+        printLine();
+        //prints the row number
+        printf(" %d ", i);
+        char c = '\0' ;
+        //if the square (i,j) is occupied,
+        //c is assigned the initial of the color of the token that occupies the square
+        for (int j = 0; j < BOARD_COLS; j++){
+            
+            if(board[i][j].col_on_top != NONE){
+                printf("| ");
+                print_colour(board[i][j].col_on_top);
+                printf(" ");
+                
+            }
+            //if the square (i,j) is empty
+            else{
+                //c is assigned 'X' if the square represents an obstacle
+                if(board[i][j].is_obstacle)
+                    printf("| %c ", 'X');
+                //c is assigned an empty space otherwise
+                else printf("| %c ", ' ');
+            }
+            printf("| %c ", c);
+        }
+        printf ("|\n");
+    }
+    printLine();
+    //prints the number of the columns at the end of the board
+    printf("     0   1   2   3   4   5   6   7   8\n");
+}
+
+void printLine(){
+    printf("   -------------------------------------\n");
+}
+
+
+//TODO: ADAPT THIS FUNCTION WITH OTHER ONE IN MAIN:
+
+void print_colour(enum COLOUR c)
+{
+    switch(c)
+    {
+        case RED:
+            printf("R");
+            break;
+            
+        case BLU:
+            printf("B");
+            break;
+            
+        case YELLOW:
+            printf("Y");
+            break;
+            
+        case GREEN:
+            printf("G");
+            break;
+            
+        case PINK:
+            printf("P");
+            break;
+            
+        case ORANGE:
+            printf("O");
+            break;
+            
+        default:
+            printf("Invalid Colour\n");
+            break;
+            
+    }
+}
+
+

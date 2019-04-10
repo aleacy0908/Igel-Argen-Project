@@ -5,6 +5,8 @@
 #include <string.h>
 
 #define TOTAL_TOKENS 24
+#define BOARD_ROWS 6
+#define BOARD_COLS 9
 
 enum COLOUR {
     RED, BLU, GREEN, YELLOW, PINK, ORANGE, NONE
@@ -39,3 +41,13 @@ typedef struct Player
 
 
 void CHOOSE_COLOURS(unsigned int num_players, struct Player player_arr[], int col_chars[]);
+
+void print_board(Tile game_board[BOARD_ROWS][BOARD_COLS]);
+void printLine();
+char print_token(Token t);
+void print_colour(enum COLOUR c);
+
+
+
+
+

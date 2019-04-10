@@ -5,13 +5,10 @@
 #include <string.h>
 #include "SETUP_BOARD.h"
 
-#define BOARD_ROWS 6
-#define BOARD_COLS 9
 #define TOKENS_PER_PLAYER 4
 
 int col_chars[6] = {'R', 'B', 'Y', 'G', 'P', 'O'};
 
-void PRINT_BOARD();
 void NEW_BOARD();
 
 void SETUP_TOKENS(unsigned int num_players, Player player_arr[]);
@@ -55,10 +52,6 @@ int main(int argc, char** argv) {
     
     
     CHOOSE_COLOURS(num_players, players, col_chars);
-    
-    //these two lines are for testing
-    players[0].team_col = RED;
-    players[1].team_col = BLU;
     
     
     SETUP_TOKENS(PLAYER_COUNT, players);
@@ -210,8 +203,6 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
             continue;
         }
         
-        print_game_stacks();
-        
         
         //Check if the stack layer needs to be incremented
         bool keep_stack_level = false;
@@ -229,7 +220,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
             }
         }
         
-        
+        print_board(GAME_BOARD);
         
         //If every tile has reached the stack layer,
         //we increment the stack layer
