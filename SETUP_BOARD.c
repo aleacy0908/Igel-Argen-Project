@@ -1,16 +1,7 @@
 #include "SETUP_BOARD.h"
-#include "struct_setup.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-#include <string.h>
 
-enum COLOUR {
-    RED, BLU, GREEN, YELLOW, PINK, ORANGE
-} COLOUR;
 
-void CHOOSE_COLOURS(unsigned int num_players, struct Player player_arr[], int col_chars[], enum COLOUR)
+void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars[])
 {
     char col_inputs[6][20] = {"R = Red\n","B = Blue\n","Y = Yellow\n","G = Green\n","P = Pink\n","O = Orange\n"};
     
