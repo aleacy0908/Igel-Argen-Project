@@ -3,18 +3,19 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
+#include "SETUP_BOARD.h"
+#include "struct_setup.h"
 
-#define TOTAL_TOKENS 24
 #define BOARD_ROWS 6
 #define BOARD_COLS 9
 
 enum COLOUR {
     RED, BLU, GREEN, YELLOW, PINK, ORANGE
-};
+} COLOUR;
 
 int col_chars[6] = {'R', 'B', 'Y', 'G', 'P', 'O'};
 
-typedef struct Token
+/*typedef struct Token
 {
     unsigned int coord[2]; //(row,column) -> e.g (0,2)
     unsigned int team; //team number from 1-6
@@ -35,11 +36,11 @@ typedef struct Player
     enum COLOUR team_col;
     unsigned int score;
     Token p_tokens[4];
-} Player;
+} Player;*/
 
 void PRINT_BOARD();
 void NEW_BOARD();
-void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[]);
+//void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[]);
 
 int roll_die();
 
@@ -54,7 +55,6 @@ int main(int argc, char** argv) {
     unsigned int num_players;
     int i = 0;
     
-    
     NEW_BOARD();
     
     printf("How many players will be playing?: ");
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     
     Player players[num_players];
     
-    CHOOSE_COLOURS(num_players, players);
+    CHOOSE_COLOURS(num_players, players, col_chars, COLOUR);
     
 }
 
@@ -94,7 +94,7 @@ void PRINT_BOARD()
     
 }
 
-void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[])
+/*void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[])
 {
     char col_inputs[6][20] = {"R = Red\n","B = Blue\n","Y = Yellow\n","G = Green\n","P = Pink\n","O = Orange\n"};
     
@@ -109,7 +109,7 @@ void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[])
             switch statement below after it's been selected
          -> Also, if the user inputs an invalid character,
             he/she is asked to try again
-        */
+ 
         
         if(invalid_input) 
         {
@@ -134,7 +134,7 @@ void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[])
          Search for the colour and if
          none is found then the input
          was invalid
-         */
+         *
         
         bool valid_colour = false;
         int num;
@@ -164,23 +164,20 @@ void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[])
                 case 'B':
                     player_arr[i].team_col = BLU;
                     break;
-                    
                 case 'Y':
                     player_arr[i].team_col = YELLOW;
                     break;
-                    
                 case 'G':
                     player_arr[i].team_col = GREEN;
-                    
+                    break;
                 case 'P':
                     player_arr[i].team_col = PINK;
-                    
+                    break;
                 case 'O':
                     player_arr[i].team_col = ORANGE;
+                    break;
             }
-            
             strcpy(col_inputs[num], ""); //Get rid of the option for this colour
         }
-        
     }
-}
+}*/

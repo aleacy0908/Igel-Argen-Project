@@ -1,6 +1,3 @@
-#ifndef SETUP_BOARD_h
-#define SETUP_BOARD_h
+#include "struct_setup.h"
 
-#include <stdio.h>
-
-#endif /* SETUP_BOARD_h */
+void CHOOSE_COLOURS(unsigned int num_players, struct Player player_arr[], int col_chars[], enum COLOUR);
