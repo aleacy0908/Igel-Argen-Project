@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
-#include "SETUP_BOARD.h"
+#include "MOVEMENT.h"
 
 #define TOKENS_PER_PLAYER 4
 
@@ -13,14 +13,11 @@ void NEW_BOARD();
 
 void SETUP_TOKENS(unsigned int num_players, Player player_arr[]);
 void print_tile_error(char error[]);
-void PRINT_COLOUR(enum COLOUR c);
+void PRINT_COLOUR_LONG(enum COLOUR c);
 void SETUP_TOKENS(unsigned int player_count, Player player_arr[]);
 
-void print_tile_atts(Tile tx);
 void print_game_stacks();
 void printList(struct stack_elem *currentPtr);
-
-int roll_die();
 
 Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS];
 
@@ -57,14 +54,8 @@ int main(int argc, char** argv) {
     SETUP_TOKENS(PLAYER_COUNT, players);
     
     
-}
-
-//ACTION FUNCTIONS
-
-//Returns a random number from 1-6
-int roll_die()
-{
-    return (rand() % 6) + 1;
+    
+    
 }
 
 //FUNCTIONS TO SET UP THE GAME
@@ -74,7 +65,9 @@ void NEW_BOARD()
     {
         for(int c = 0; c < BOARD_COLS; c++)
         {
-            Tile new_tile = {false,false, 0, NONE, NULL};
+            Tile new_tile = {false,false, 0, NULL};
+            
+            new_tile.stack_top = push(NONE, new_tile.stack_top);
             
             GAME_BOARD[r][c] = new_tile;
         }
@@ -108,7 +101,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
         Token tkn = player_arr[turn].p_tokens[round];
         
         printf("Player Turn: ");
-        PRINT_COLOUR(plyr.team_col);
+        PRINT_COLOUR_LONG(plyr.team_col);
         
         printf("\nWhich row would you like to place your token?\n");
         printf("Enter a number from 0-5\n");
@@ -129,7 +122,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
         //and it's the players own colour, they
         //can place their token on another tile
         bool viable_tile = tl.stack_count == stack_layer;
-        bool own_token_on_top = tl.col_on_top == plyr.team_col;
+        bool own_token_on_top = tl.stack_top->data == plyr.team_col;
         
         
         //This counts how many viable tiles are
@@ -145,7 +138,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
                 viable_tile_count++;
             }
             
-            if(x.col_on_top == plyr.team_col)
+            if(x.stack_top->data == plyr.team_col)
             {
                 own_team_on_top++;
             }
@@ -182,7 +175,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
             GAME_BOARD[input][0].stack_count++;
             
             //Change the colour on top of the stack
-            GAME_BOARD[input][0].col_on_top = plyr.team_col;
+            GAME_BOARD[input][0].stack_top->data = plyr.team_col;
             
         }
         else if(!viable_tile && !own_token_on_top)
@@ -236,43 +229,6 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
     }
 }
 
-
-
-void PRINT_COLOUR(enum COLOUR c)
-{
-    switch(c)
-    {
-        case RED:
-            printf("Red");
-            break;
-            
-        case BLU:
-            printf("Blue");
-            break;
-            
-        case YELLOW:
-            printf("Yellow");
-            break;
-            
-        case GREEN:
-            printf("Green");
-            break;
-            
-        case PINK:
-            printf("Pink");
-            break;
-            
-        case ORANGE:
-            printf("Orange");
-            break;
-            
-        default:
-            printf("Invalid Colour\n");
-            break;
-            
-    }
-}
-
 void print_game_stacks()
 {
     printf("\n");
@@ -286,11 +242,6 @@ void print_game_stacks()
         }
         printf("\n");
     }
-}
-
-void print_tile_atts(Tile tx)
-{
-    printf("Stack Count: %d\n Colour On Top: %d\n\n\n", tx.stack_count, tx.col_on_top);
 }
 
 void print_tile_error(char error[])

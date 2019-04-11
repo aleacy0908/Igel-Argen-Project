@@ -120,9 +120,9 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
         //c is assigned the initial of the color of the token that occupies the square
         for (int j = 0; j < BOARD_COLS; j++){
             
-            if(board[i][j].col_on_top != NONE){
+            if(board[i][j].stack_top != NULL){
                 printf("| ");
-                print_colour(board[i][j].col_on_top);
+                print_colour(board[i][j].stack_top->data);
                 printf(" ");
                 
             }
@@ -176,6 +176,41 @@ void print_colour(enum COLOUR c)
             
         case ORANGE:
             printf("O");
+            break;
+            
+        default:
+            printf("Invalid Colour\n");
+            break;
+            
+    }
+}
+
+void PRINT_COLOUR_LONG(enum COLOUR c)
+{
+    switch(c)
+    {
+        case RED:
+            printf("Red");
+            break;
+            
+        case BLU:
+            printf("Blue");
+            break;
+            
+        case YELLOW:
+            printf("Yellow");
+            break;
+            
+        case GREEN:
+            printf("Green");
+            break;
+            
+        case PINK:
+            printf("Pink");
+            break;
+            
+        case ORANGE:
+            printf("Orange");
             break;
             
         default:

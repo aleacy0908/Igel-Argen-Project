@@ -33,8 +33,6 @@ typedef struct Tile
     bool is_obstacle; //is this tile a black obstacle tile?
     int stack_count;
     
-    enum COLOUR col_on_top;
-    
     struct stack_elem *stack_top;
     
     
@@ -56,7 +54,9 @@ void CHOOSE_COLOURS(unsigned int num_players, struct Player player_arr[], int co
 void print_board(Tile game_board[BOARD_ROWS][BOARD_COLS]);
 void printLine();
 char print_token(Token t);
+
 void print_colour(enum COLOUR c);
+void PRINT_COLOUR_LONG(enum COLOUR c);
 
 
 
