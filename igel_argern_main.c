@@ -18,7 +18,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[]);
 
 void print_tile_atts(Tile tx);
 void print_game_stacks();
-
+void printList(struct stack_elem *currentPtr);
 
 int roll_die();
 
@@ -56,6 +56,7 @@ int main(int argc, char** argv) {
     
     SETUP_TOKENS(PLAYER_COUNT, players);
     
+    
 }
 
 //ACTION FUNCTIONS
@@ -73,7 +74,7 @@ void NEW_BOARD()
     {
         for(int c = 0; c < BOARD_COLS; c++)
         {
-            Tile new_tile = {false,false, 0, NONE};
+            Tile new_tile = {false,false, 0, NONE, NULL};
             
             GAME_BOARD[r][c] = new_tile;
         }
@@ -174,11 +175,14 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
             
             player_arr[turn].p_tokens[round] = tkn;
             
+            //Push to the stack for this tile
+            GAME_BOARD[input][0].stack_top = push(plyr.team_col, GAME_BOARD[input][0].stack_top);
+            
+            //Increase the stack count
             GAME_BOARD[input][0].stack_count++;
             
+            //Change the colour on top of the stack
             GAME_BOARD[input][0].col_on_top = plyr.team_col;
-            
-            //PRINT_TILE_BOARD(player_arr); PUT TEACHERS FUNCTION CALL HERE
             
         }
         else if(!viable_tile && !own_token_on_top)
@@ -221,6 +225,7 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
         }
         
         print_board(GAME_BOARD);
+        printList(GAME_BOARD[input][0].stack_top);
         
         //If every tile has reached the stack layer,
         //we increment the stack layer
@@ -293,5 +298,27 @@ void print_tile_error(char error[])
     printf("~You cannot select this tile~\n");
     printf("Reason: %s\n", error);
     printf("TRY AGAIN\n\n");
+}
+
+
+//delete
+void printList(struct stack_elem *currentPtr)
+{
+    /* if list is empty */
+    if ( currentPtr == NULL ) {
+        printf( "List is empty.\n\n" );
+    } /* end if */
+    else {
+        printf( "The list is:\n" );
+        
+        /* while not the end of the list */
+        while ( currentPtr != NULL ) {
+            print_colour(currentPtr->data);
+            printf(" ");
+            currentPtr = currentPtr->next;
+        } /* end while */
+        
+        printf( " NULL\n\n" );
+    }
 }
 

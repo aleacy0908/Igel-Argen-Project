@@ -88,6 +88,25 @@ void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars
     }
 }
 
+struct stack_elem * push(enum COLOUR col, struct stack_elem *top){
+    struct stack_elem *curr = top;
+    top = malloc(sizeof(stack));
+    top->data = col;
+    top->next = curr;
+    return top;
+}
+
+
+struct stack_elem * pop(struct stack_elem *top){
+    struct stack_elem *curr = top;
+    if(curr!=NULL){
+        top = curr->next;
+        printf("Stack Data: %d\n", curr->data);
+        free(curr);
+    }
+    return top;
+}
+
 void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
     printf("                THE BOARD\n");
     for(int i =0; i < BOARD_ROWS; i++){

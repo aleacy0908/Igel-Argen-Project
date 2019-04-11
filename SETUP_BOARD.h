@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
 
 #define TOTAL_TOKENS 24
@@ -12,6 +11,13 @@ enum COLOUR {
     RED, BLU, GREEN, YELLOW, PINK, ORANGE, NONE
 };
 
+//STACK STRUCT
+typedef struct stack_elem{
+    enum COLOUR data;
+    struct stack_elem *next;
+} stack;
+
+//GAME STRUCTS
 typedef struct Token
 {
     unsigned int coord[2]; //(row,column) -> e.g (0,2)
@@ -28,7 +34,9 @@ typedef struct Tile
     int stack_count;
     
     enum COLOUR col_on_top;
-    Token tokens_stack[TOTAL_TOKENS]; //first token in is first token in array
+    
+    struct stack_elem *stack_top;
+    
     
 }Tile;
 
@@ -38,6 +46,9 @@ typedef struct Player
     unsigned int score;
     Token p_tokens[4];
 }Player;
+
+struct stack_elem * push(enum COLOUR col, struct stack_elem *top);
+struct stack_elem * pop(struct stack_elem *top);
 
 
 void CHOOSE_COLOURS(unsigned int num_players, struct Player player_arr[], int col_chars[]);
