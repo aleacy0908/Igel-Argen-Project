@@ -50,12 +50,12 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
             printf("Enter Col: ");
             scanf("%d", &c);
             
-            //Check if this position is valid
-            //i.e is their token on top of this tile?
+            //CHECK IF THEY HAVE TRIED TO SIDESTEP SOMEONE ELSES TOKEN
+            //You cannot sidestep a token that is not your own.
             if(GAME_BOARD[r][c].stack_top->data == p.team_col)
                 valid_token = true;
             
-            if(!valid_token) printf("This is not a valid token.\n");
+            if(!valid_token) printf("You cannot sidestep someone elses token.\n");
         }
         
         bool sidestep_complete = false;
@@ -94,44 +94,45 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
             }
         }
         
-        
-        //PART (C)
-        int col;
-        
         print_board(GAME_BOARD);
-        
-        bool forward_move_succeeded = false;
-        
-        while(!forward_move_succeeded)
-        {
-            printf("You must move one token forward on row %d.\n", rolled_num);
-            
-            printf("Which token would you like to move?\n"
-                   "Enter Column: ");
-            
-            scanf("%d", &col);
-            
-            if(!(col > 0) || !(col < 5))
-            {
-                printf("\n\nInvalid Input. Try Again.\n");
-            }
-            else if(GAME_BOARD[rolled_num][col].stack_top->data != NONE)
-            {
-                move_forward(GAME_BOARD, rolled_num, col);
-                forward_move_succeeded = true;
-            }
-            else
-            {
-                printf("\n\nThere is no token on this tile.\n"
-                       "Try Again.\n");
-            }
-        }
-        
-        print_board(GAME_BOARD);
-        
-        printf("\n\nTURN OVER\n\n");
-        
     }
+    
+        
+    //PART (C)
+    int col;
+    
+    bool forward_move_succeeded = false;
+    
+    while(!forward_move_succeeded)
+    {
+        printf("You must move one token forward on row %d.\n", rolled_num);
+        
+        printf("Which token would you like to move?\n"
+               "Enter Column: ");
+        
+        scanf("%d", &col);
+        
+        if(col < 0 || col > 5)
+        {
+            printf("\n\nInvalid Input. Try Again.\n");
+        }
+        else if(GAME_BOARD[rolled_num][col].stack_top->data != NONE)
+        {
+            move_forward(GAME_BOARD, &p, rolled_num, col);
+            forward_move_succeeded = true;
+        }
+        else
+        {
+            printf("\n\nThere is no token on this tile.\n"
+                   "Try Again.\n");
+        }
+    }
+    
+    print_board(GAME_BOARD);
+    
+    printf("\n\nTURN OVER\n\n");
+        
+    
 }
 
 void move_up(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c)
@@ -164,7 +165,7 @@ void move_down(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c)
 }
 
 
-void move_forward(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c)
+void move_forward(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], Player *p, int r, int c)
 {
     /*
      r1 = original row
@@ -177,4 +178,17 @@ void move_forward(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c)
     GAME_BOARD[r][c].stack_count--;
     GAME_BOARD[r][c+1].stack_count++;
     
+    //INCREMENT SCORE
+    //Check if a token is entering the last column i.e the winning one
+    if((c+1) == (BOARD_COLS-1))
+        p->score++;
+    
 }
+
+
+
+
+
+
+
+

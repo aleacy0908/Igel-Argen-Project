@@ -4,7 +4,6 @@
 #include <time.h>
 #include <string.h>
 #include "MOVEMENT.h"
-//#include "SETUP_BOARD.h"
 
 #define TOKENS_PER_PLAYER 4
 
@@ -20,10 +19,16 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[]);
 void print_game_stacks();
 void printList(struct stack_elem *currentPtr);
 
+bool check_for_winner(Player p_arr[], Player *winner, int player_count);
+
+void print_score_board(Player p_arr[], int player_count);
+
 Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS];
 
 int PLAYER_COUNT;
 int PLAYER_TURN;
+
+bool GAME_WON = false;
 
 int main(int argc, char** argv) {
     
@@ -31,12 +36,12 @@ int main(int argc, char** argv) {
     
     unsigned int num_players;
     
+    printf("--Igel Ärgern--\n\n");
+    
     NEW_BOARD();
     
     printf("How many players will be playing?: ");
-    scanf("%d", &num_players);
-    
-    PLAYER_COUNT = num_players;
+    scanf("%d", &PLAYER_COUNT);
     
     Player players[PLAYER_COUNT];
     
@@ -44,21 +49,61 @@ int main(int argc, char** argv) {
     for(int c = 0; c < num_players; c++)
     {
         Player new_player;
+        new_player.player_id = c;
+        new_player.score = 0;
         
         players[c] = new_player;
     }
     
     
-    CHOOSE_COLOURS(num_players, players, col_chars);
+    CHOOSE_COLOURS(PLAYER_COUNT, players, col_chars);
     
     
     SETUP_TOKENS(PLAYER_COUNT, players);
     
+    int p_turn = 0;
+    Player winning_player;
+    
+    while(!GAME_WON)
+    {
+        TAKE_TURN(players[p_turn], GAME_BOARD);
+        
+        GAME_WON = check_for_winner(players, &winning_player, PLAYER_COUNT);
+        
+        
+        if(p_turn == (PLAYER_COUNT-1))
+            p_turn = 0;
+        else p_turn++;
+    }
+    
+    //Player has won
+    printf("\n\n\n~THERE IS A WINNER~\n\n"
+           "Congratulations To Team ");
+    PRINT_COLOUR_LONG(winning_player.team_col);
+    
+    print_score_board(players, PLAYER_COUNT);
     
     
     
 }
 
+void print_score_board(Player p_arr[], int player_count)
+{
+    printf("\n--FINAL SCOREBOARD--\n");
+    
+    for(int i = 0; i < player_count; i++)
+    {
+        Player p = p_arr[i];
+        
+        printf("\n");
+        PRINT_COLOUR_LONG(p.team_col);
+        printf(" Score: %u", p.score);
+        
+        if(p.score == 3)
+            printf(" *WINNER* ");
+        
+    }
+}
 //FUNCTIONS TO SET UP THE GAME
 void NEW_BOARD()
 {
@@ -230,6 +275,23 @@ void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
     }
 }
 
+bool check_for_winner(Player p_arr[], Player *winner, int player_count)
+{
+    for(int i = 0; i < player_count; i++)
+    {
+        Player p = p_arr[i];
+        
+        if(p.score == 3)
+        {
+            winner = &p;
+            return true;
+        }
+        
+    }
+    
+    return false;
+}
+
 void print_game_stacks()
 {
     printf("\n");
@@ -264,13 +326,13 @@ void printList(struct stack_elem *currentPtr)
         printf( "The list is:\n" );
         
         /* while not the end of the list */
-        while ( currentPtr != NULL ) {
+        while ( currentPtr->data != NONE ) {
             print_colour(currentPtr->data);
             printf(" ");
             currentPtr = currentPtr->next;
         } /* end while */
         
-        printf( " \n\n" );
+        printf( " NULL\n\n" );
     }
 }
 

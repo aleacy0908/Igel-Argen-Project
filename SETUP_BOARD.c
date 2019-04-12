@@ -120,7 +120,7 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
         //c is assigned the initial of the color of the token that occupies the square
         for (int j = 0; j < BOARD_COLS; j++){
             
-            if(board[i][j].stack_top != NULL){
+            if(board[i][j].stack_top->data != NONE){
                 printf("|");
                 print_colour(board[i][j].stack_top->data);
                 //printf(" ");
@@ -130,11 +130,11 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
             else{
                 //c is assigned 'X' if the square represents an obstacle
                 if(board[i][j].is_obstacle)
-                    printf("| %c ", 'X');
+                    printf("|%c ", 'X');
                 //c is assigned an empty space otherwise
-                else printf("| %c ", ' ');
+                else printf("|%c", ' ');
             }
-            printf("| %c ", c);
+            printf("| %c", c);
         }
         printf ("\n");
     }
@@ -144,7 +144,7 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
 }
 
 void printLine(){
-    printf("   -------------------------------------\n");
+    printf("   -----------------------------------\n");
 }
 
 
@@ -179,7 +179,7 @@ void print_colour(enum COLOUR c)
             break;
             
         default:
-            printf("");
+            printf("Invalid Colour\n");
             break;
             
     }
@@ -219,5 +219,7 @@ void PRINT_COLOUR_LONG(enum COLOUR c)
             
     }
 }
+
+
 
 

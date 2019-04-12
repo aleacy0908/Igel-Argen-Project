@@ -21,15 +21,12 @@ typedef struct stack_elem{
 typedef struct Token
 {
     unsigned int coord[2]; //(row,column) -> e.g (0,2)
-    unsigned int team; //team number from 1-6
-    //unsigned int token_id; //token number from 1-4
     enum COLOUR token_col;
     
 }Token;
 
 typedef struct Tile
 {
-    bool is_occupied; //does this tile have any tokens on it?
     bool is_obstacle; //is this tile a black obstacle tile?
     int stack_count;
     
@@ -43,6 +40,8 @@ typedef struct Player
     enum COLOUR team_col;
     unsigned int score;
     Token p_tokens[4];
+    unsigned int player_id;
+    
 }Player;
 
 struct stack_elem * push(enum COLOUR col, struct stack_elem *top);
