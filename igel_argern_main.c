@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     
     
     CHOOSE_COLOURS(PLAYER_COUNT, players, col_chars);
-    
+
     
     SETUP_TOKENS(PLAYER_COUNT, players);
     
@@ -332,7 +332,7 @@ void printList(struct stack_elem *currentPtr)
             currentPtr = currentPtr->next;
         } /* end while */
         
-        printf( " NULL\n\n" );
+        printf( " \n\n" );
     }
 }
 

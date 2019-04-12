@@ -107,14 +107,20 @@ struct stack_elem * pop(struct stack_elem *top){
     return top;
 }
 
+bool obstacles_done = false;
+
 void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
     printf("                THE BOARD\n");
     
-    for(int i = 0; i < BOARD_ROWS; i++){
-        
-        int obstacle_placement = rand() % 7 + 2;
-        
-        board[i][obstacle_placement].is_obstacle = true;
+    while (obstacles_done != true)
+    {
+        for(int i = 0; i < BOARD_ROWS; i++)
+        {
+            int obstacle_placement = rand() % 7 + 2;
+            
+            board[i][obstacle_placement].is_obstacle = true;
+        }
+        obstacles_done = true;
     }
     
     for(int i =0; i < BOARD_ROWS; i++){
@@ -227,7 +233,3 @@ void PRINT_COLOUR_LONG(enum COLOUR c)
             
     }
 }
-
-
-
-
