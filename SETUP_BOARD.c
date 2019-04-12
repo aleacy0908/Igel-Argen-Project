@@ -109,6 +109,14 @@ struct stack_elem * pop(struct stack_elem *top){
 
 void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
     printf("                THE BOARD\n");
+    
+    for(int i = 0; i < BOARD_ROWS; i++){
+        
+        int obstacle_placement = rand() % 7 + 2;
+        
+        board[i][obstacle_placement].is_obstacle = true;
+    }
+    
     for(int i =0; i < BOARD_ROWS; i++){
         
         //prints an horizontal line
