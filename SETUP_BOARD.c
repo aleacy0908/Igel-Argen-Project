@@ -1,4 +1,5 @@
 #include "SETUP_BOARD.h"
+#include <stdbool.h>
 
 void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars[])
 {
@@ -108,9 +109,18 @@ struct stack_elem * pop(struct stack_elem *top){
 }
 
 void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
-    printf("                THE BOARD\n");
-    for(int i =0; i < BOARD_ROWS; i++){
+    
+    printf("                                  THE BOARD\n");
+    
+    for(int i = 0; i < BOARD_ROWS; i++){
         
+        int obstacle_placement = rand() % 7 + 2;
+        
+        board[i][obstacle_placement].is_obstacle = true;
+    }
+    
+    for(int i = 0; i < BOARD_ROWS; i++){
+
         //prints an horizontal line
         printLine();
         //prints the row number
@@ -118,33 +128,35 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
         char c = '\0' ;
         //if the square (i,j) is occupied,
         //c is assigned the initial of the color of the token that occupies the square
-        for (int j = 0; j < BOARD_COLS; j++){
+        for (int j = 0; j < BOARD_COLS; j++)
+        {
             
             if(board[i][j].stack_top != NULL){
-                printf("|");
+                printf("| ");
                 print_colour(board[i][j].stack_top->data);
                 //printf(" ");
                 
             }
             //if the square (i,j) is empty
-            else{
+            {
                 //c is assigned 'X' if the square represents an obstacle
                 if(board[i][j].is_obstacle)
-                    printf("| %c ", 'X');
+                    printf("%c", 'X');
                 //c is assigned an empty space otherwise
-                else printf("| %c ", ' ');
+                //else
+                  //  printf("| %c ", ' ');
             }
-            printf("| %c ", c);
+            printf(" |   %c ", c);
         }
         printf ("\n");
     }
     printLine();
     //prints the number of the columns at the end of the board
-    printf("    0   1   2   3   4   5   6   7   8\n");
+    printf("     0       1       2       3       4       5       6       7       8\n");
 }
 
 void printLine(){
-    printf("   -------------------------------------\n");
+    printf("   --------------------------------------------------------------------------\n");
 }
 
 
@@ -220,4 +232,7 @@ void PRINT_COLOUR_LONG(enum COLOUR c)
     }
 }
 
-
+void OBSTACLE_FUNCTION(Tile game_board[BOARD_ROWS][BOARD_COLS])
+{
+    
+}
