@@ -97,7 +97,6 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
         print_board(GAME_BOARD);
     }
     
-    
     //PART (C)
     int col;
     
@@ -131,7 +130,6 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
     print_board(GAME_BOARD);
     
     printf("\n\nTURN OVER\n\n");
-    
     
 }
 
