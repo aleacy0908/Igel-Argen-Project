@@ -121,9 +121,9 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
         for (int j = 0; j < BOARD_COLS; j++){
             
             if(board[i][j].stack_top != NULL){
-                printf("| ");
+                printf("|");
                 print_colour(board[i][j].stack_top->data);
-                printf(" ");
+                //printf(" ");
                 
             }
             //if the square (i,j) is empty
@@ -136,11 +136,11 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
             }
             printf("| %c ", c);
         }
-        printf ("|\n");
+        printf ("\n");
     }
     printLine();
     //prints the number of the columns at the end of the board
-    printf("     0   1   2   3   4   5   6   7   8\n");
+    printf("    0   1   2   3   4   5   6   7   8\n");
 }
 
 void printLine(){
@@ -179,7 +179,7 @@ void print_colour(enum COLOUR c)
             break;
             
         default:
-            printf("Invalid Colour\n");
+            printf("");
             break;
             
     }

@@ -4,6 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include "MOVEMENT.h"
+//#include "SETUP_BOARD.h"
 
 #define TOKENS_PER_PLAYER 4
 
@@ -269,7 +270,7 @@ void printList(struct stack_elem *currentPtr)
             currentPtr = currentPtr->next;
         } /* end while */
         
-        printf( " NULL\n\n" );
+        printf( " \n\n" );
     }
 }
 
