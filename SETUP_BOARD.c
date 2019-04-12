@@ -138,21 +138,21 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
             else{
                 //c is assigned 'X' if the square represents an obstacle
                 if(board[i][j].is_obstacle)
-                    printf("|%c ", 'X');
+                    printf("|%c", 'X');
                 //c is assigned an empty space otherwise
                 else printf("|%c", ' ');
             }
-            printf("| %c", c);
+            printf("|    %c", c);
         }
         printf ("\n");
     }
     printLine();
     //prints the number of the columns at the end of the board
-    printf("    0   1   2   3   4   5   6   7   8\n");
+    printf("    0      1      2      3      4      5      6      7      8\n");
 }
 
 void printLine(){
-    printf("   -----------------------------------\n");
+    printf("   ----------------------------------------------------------------\n");
 }
 
 
