@@ -32,7 +32,8 @@ bool GAME_WON = false;
 
 int main(int argc, char** argv) {
     
-    srand(time(NULL)); //Sets up the random generator
+    time_t t;
+    srand((unsigned) time(&t)); //Sets up the random generator
     
     unsigned int num_players;
     
@@ -83,8 +84,6 @@ int main(int argc, char** argv) {
     
     print_score_board(players, PLAYER_COUNT);
     
-    
-    
 }
 
 void print_score_board(Player p_arr[], int player_count)
@@ -111,12 +110,19 @@ void NEW_BOARD()
     {
         for(int c = 0; c < BOARD_COLS; c++)
         {
-            Tile new_tile = {false,false, 0, NULL};
+            Tile new_tile = {false,false, NULL};
             
             new_tile.stack_top = push(NONE, new_tile.stack_top);
             
             GAME_BOARD[r][c] = new_tile;
         }
+    }
+    
+    for(int i = 0; i < BOARD_ROWS; i++)
+    {
+        int obstacle_placement = rand() % 7 + 1;
+        
+        GAME_BOARD[i][obstacle_placement].is_obstacle = true;
     }
 }
 
