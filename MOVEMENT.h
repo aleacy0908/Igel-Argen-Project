@@ -6,6 +6,8 @@ int roll_die();
 
 void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS]);
 
+bool token_stuck(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c);
+
 void move_down(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c);
 void move_up(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c);
 void move_forward(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], Player *p, int r, int c);

@@ -32,8 +32,9 @@ bool GAME_WON = false;
 
 int main(int argc, char** argv) {
     
+    //Set up a random number generator (based on time)
     time_t t;
-    srand((unsigned) time(&t)); //Sets up the random generator
+    srand((unsigned) time(&t));
     
     unsigned int num_players;
     
@@ -71,13 +72,21 @@ int main(int argc, char** argv) {
         
         GAME_WON = check_for_winner(players, &winning_player, PLAYER_COUNT);
         
-        
         if(p_turn == (PLAYER_COUNT-1))
             p_turn = 0;
         else p_turn++;
     }
     
-    //Player has won
+    //END OF GAME: PLAYER WINS
+    
+    
+    /*A player wins the game if they reach a score of 3.
+     When someone wins, we congratulate the winner and
+     print out a scoreboard.
+     
+     This scoreboard lists every player and their final
+     score. It also makes clear who won the game.
+     */
     printf("\n\n\n~THERE IS A WINNER~\n\n"
            "Congratulations To Team ");
     PRINT_COLOUR_LONG(winning_player.team_col);
