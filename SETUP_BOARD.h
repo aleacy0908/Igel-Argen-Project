@@ -47,6 +47,7 @@ typedef struct Player
 struct stack_elem * push(enum COLOUR col, struct stack_elem *top);
 struct stack_elem * pop(struct stack_elem *top);
 
+void NEW_BOARD(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS]);
 
 void CHOOSE_COLOURS(unsigned int num_players, struct Player player_arr[], int col_chars[]);
 

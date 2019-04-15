@@ -1,5 +1,27 @@
 #include "SETUP_BOARD.h"
 
+void NEW_BOARD(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
+{
+    for(int r = 0; r < BOARD_ROWS; r++)
+    {
+        for(int c = 0; c < BOARD_COLS; c++)
+        {
+            Tile new_tile = {false,false, NULL};
+            
+            new_tile.stack_top = push(NONE, new_tile.stack_top);
+            
+            GAME_BOARD[r][c] = new_tile;
+        }
+    }
+    
+    for(int i = 0; i < BOARD_ROWS; i++)
+    {
+        int obstacle_placement = rand() % 7 + 1;
+        
+        GAME_BOARD[i][obstacle_placement].is_obstacle = true;
+    }
+}
+
 void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars[])
 {
     char col_inputs[6][20] = {"R = Red\n","B = Blue\n","Y = Yellow\n","G = Green\n","P = Pink\n","O = Orange\n"};
@@ -107,21 +129,8 @@ struct stack_elem * pop(struct stack_elem *top){
     return top;
 }
 
-bool obstacles_done = false;
-
 void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
     printf("                THE BOARD\n");
-    
-    while (obstacles_done != true)
-    {
-        for(int i = 0; i < BOARD_ROWS; i++)
-        {
-            int obstacle_placement = rand() % 7 + 2;
-            
-            board[i][obstacle_placement].is_obstacle = true;
-        }
-        obstacles_done = true;
-    }
     
     for(int i =0; i < BOARD_ROWS; i++){
         
@@ -158,7 +167,7 @@ void print_board(Tile board[BOARD_ROWS][BOARD_COLS]){
 }
 
 void printLine(){
-    printf("   ----------------------------------------------------------------\n");
+    printf("   -----------------------------------------------------------\n");
 }
 
 

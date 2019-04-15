@@ -9,8 +9,6 @@
 
 int col_chars[6] = {'R', 'B', 'Y', 'G', 'P', 'O'};
 
-void NEW_BOARD();
-
 void SETUP_TOKENS(unsigned int num_players, Player player_arr[]);
 void print_tile_error(char error[]);
 void PRINT_COLOUR_LONG(enum COLOUR c);
@@ -32,13 +30,15 @@ bool GAME_WON = false;
 
 int main(int argc, char** argv) {
     
-    srand(time(NULL)); //Sets up the random generator
+    //Set up a random number generator (based on time)
+    time_t t;
+    srand((unsigned) time(&t));
     
     unsigned int num_players;
     
     printf("--Igel Ärgern--\n\n");
     
-    NEW_BOARD();
+    NEW_BOARD(GAME_BOARD);
     
     printf("How many players will be playing?: ");
     scanf("%d", &PLAYER_COUNT);
@@ -70,20 +70,26 @@ int main(int argc, char** argv) {
         
         GAME_WON = check_for_winner(players, &winning_player, PLAYER_COUNT);
         
-        
         if(p_turn == (PLAYER_COUNT-1))
             p_turn = 0;
         else p_turn++;
     }
     
-    //Player has won
+    //END OF GAME: PLAYER WINS
+    
+    
+    /*A player wins the game if they reach a score of 3.
+     When someone wins, we congratulate the winner and
+     print out a scoreboard.
+     
+     This scoreboard lists every player and their final
+     score. It also makes clear who won the game.
+     */
     printf("\n\n\n~THERE IS A WINNER~\n\n"
            "Congratulations To Team ");
     PRINT_COLOUR_LONG(winning_player.team_col);
     
     print_score_board(players, PLAYER_COUNT);
-    
-    
     
 }
 
@@ -105,20 +111,27 @@ void print_score_board(Player p_arr[], int player_count)
     }
 }
 //FUNCTIONS TO SET UP THE GAME
-void NEW_BOARD()
+/*void NEW_BOARD()
 {
     for(int r = 0; r < BOARD_ROWS; r++)
     {
         for(int c = 0; c < BOARD_COLS; c++)
         {
-            Tile new_tile = {false,false, 0, NULL};
+            Tile new_tile = {false,false, NULL};
             
             new_tile.stack_top = push(NONE, new_tile.stack_top);
             
             GAME_BOARD[r][c] = new_tile;
         }
     }
-}
+    
+    for(int i = 0; i < BOARD_ROWS; i++)
+    {
+        int obstacle_placement = rand() % 7 + 1;
+        
+        GAME_BOARD[i][obstacle_placement].is_obstacle = true;
+    }
+}*/
 
 void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
 {
