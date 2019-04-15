@@ -32,9 +32,7 @@ bool GAME_WON = false;
 
 int main(int argc, char** argv) {
     
-    //Set up a random number generator (based on time)
-    time_t t;
-    srand((unsigned) time(&t));
+    srand(time(NULL)); //Sets up the random generator
     
     unsigned int num_players;
     
@@ -72,26 +70,20 @@ int main(int argc, char** argv) {
         
         GAME_WON = check_for_winner(players, &winning_player, PLAYER_COUNT);
         
+        
         if(p_turn == (PLAYER_COUNT-1))
             p_turn = 0;
         else p_turn++;
     }
     
-    //END OF GAME: PLAYER WINS
-    
-    
-    /*A player wins the game if they reach a score of 3.
-     When someone wins, we congratulate the winner and
-     print out a scoreboard.
-     
-     This scoreboard lists every player and their final
-     score. It also makes clear who won the game.
-     */
+    //Player has won
     printf("\n\n\n~THERE IS A WINNER~\n\n"
            "Congratulations To Team ");
     PRINT_COLOUR_LONG(winning_player.team_col);
     
     print_score_board(players, PLAYER_COUNT);
+    
+    
     
 }
 
@@ -119,19 +111,12 @@ void NEW_BOARD()
     {
         for(int c = 0; c < BOARD_COLS; c++)
         {
-            Tile new_tile = {false,false, NULL};
+            Tile new_tile = {false,false, 0, NULL};
             
             new_tile.stack_top = push(NONE, new_tile.stack_top);
             
             GAME_BOARD[r][c] = new_tile;
         }
-    }
-    
-    for(int i = 0; i < BOARD_ROWS; i++)
-    {
-        int obstacle_placement = rand() % 7 + 1;
-        
-        GAME_BOARD[i][obstacle_placement].is_obstacle = true;
     }
 }
 

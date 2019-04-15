@@ -40,9 +40,8 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
         int r,c;
         
         bool valid_token = false;
-        bool is_stuck;
         
-        do
+        while(!valid_token)
         {
             printf("Please Select A Token To Be Moved\n"
                    "Enter Row: ");
@@ -51,30 +50,13 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
             printf("Enter Col: ");
             scanf("%d", &c);
             
-            is_stuck = token_stuck(GAME_BOARD, r, c);
-            
-            
-            //If you own this token, you can sidestep it.
+            //CHECK IF THEY HAVE TRIED TO SIDESTEP SOMEONE ELSES TOKEN
+            //You cannot sidestep a token that is not your own.
             if(GAME_BOARD[r][c].stack_top->data == p.team_col)
                 valid_token = true;
             
-            
-            /* ERROR MESSAGES
-             Valid Token: This means that you own the token. If you don't, then you cannot
-             sidestep it.
-             
-             Is_Stuck: This is true/false. If its true, then we cannot sidestep this token.
-             */
-            if(!valid_token && !is_stuck)
-                printf("You cannot sidestep this token as it is not yours. Try Again.\n");
-            else if(valid_token && is_stuck)
-                printf("TOKEN STUCK: This token is on an obstacle and cannot be moved yet. Try Again.\n");
-            else if(!valid_token && is_stuck)
-                printf("This token is STUCK and is not your own. Try Again.\n");
-            
-        
-        } while(!valid_token || is_stuck);
-        
+            if(!valid_token) printf("You cannot sidestep someone elses token.\n");
+        }
         
         bool sidestep_complete = false;
         
@@ -92,20 +74,17 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
             close_to_top = (r == 0);
             close_to_bottom = (r == 5);
             
-            /*The player wants to move UP & the token isn't too high on the board*/
-            if(a == 0 && !close_to_top)
+            if(a == 0 && !close_to_top) //UP & the token isn't at the highest row
             {
                 move_up(GAME_BOARD, r, c);
                 sidestep_complete = true;
             }
-            /*The player wants to move DOWN & the token isn't too low on the board*/
-            else if (a == 1 && !close_to_bottom)
+            else if (a == 1 && !close_to_bottom) //DOWN & the token isn't at the lowest row
             {
                 move_down(GAME_BOARD, r, c);
                 sidestep_complete = true;
             }
-            /*The token is too close to the edge for this move*/
-            else if((close_to_top || close_to_bottom))
+            else if(close_to_top || close_to_bottom)
             {
                 printf("\nTRY AGAIN: Your token is too close to the edge for this move.\n");
             }
@@ -117,7 +96,6 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
         
         print_board(GAME_BOARD);
     }
-    
     
     //PART (C)
     int col;
@@ -152,7 +130,6 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
     print_board(GAME_BOARD);
     
     printf("\n\nTURN OVER\n\n");
-    
     
 }
 
@@ -204,39 +181,6 @@ void move_forward(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], Player *p, int r, int
     if((c+1) == (BOARD_COLS-1))
         p->score++;
     
-}
-
-bool token_stuck(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS], int r, int c)
-{
-    Tile tl = GAME_BOARD[r][c];
-    
-    //It can only be stuck if it's the first token on that tile
-    //and that tile is an obstacle
-    if(tl.stack_count == 1 && tl.is_obstacle)
-    {
-        
-        for(int i = 0; i < c; i++)
-        {
-            /*
-             We can only move a token on an obstacle if every token
-             on that row has passed it already. Therefore, we need
-             to check that the stack count is 0 on every
-             tile before the obstacle.
-             
-             If there is any tile before our obstaclewhere stack count
-             is greater than 0, then the token we're trying to move
-             is still stuck.
-             */
-            
-            if(GAME_BOARD[r][i].stack_count != 0)
-            {
-                return true;
-            }
-        }
-        
-    }
-    
-    return false;
 }
 
 
