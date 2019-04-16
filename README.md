@@ -1,2 +1,5 @@
+# COMP10050
 # Software Engineering Project 2
-# Igel Argern
+# Assignment 2: Igel Argern
+
+Developers: Daniel Gallagher, Adam Leacy
