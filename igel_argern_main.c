@@ -1,3 +1,12 @@
+/*
+ COMP10050: Software Engineering Project 1
+ Assignment 2
+ 
+ Assignment Title: Igel Argern
+ 
+ Developers: Daniel Gallagher, Adam Leacy
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -5,36 +14,43 @@
 #include <string.h>
 #include "MOVEMENT.h"
 
-#define TOKENS_PER_PLAYER 4
-
-int col_chars[6] = {'R', 'B', 'Y', 'G', 'P', 'O'};
-
-void SETUP_TOKENS(unsigned int num_players, Player player_arr[]);
-void print_tile_error(char error[]);
-void PRINT_COLOUR_LONG(enum COLOUR c);
-void SETUP_TOKENS(unsigned int player_count, Player player_arr[]);
-
-void print_game_stacks();
-void printList(struct stack_elem *currentPtr);
-
-bool check_for_winner(Player p_arr[], Player *winner, int player_count);
+/* -Print Functions-
+ Printing A Scoreboard: A Scoreboard is printed at the 
+ end of the game to show the final score of each player.
+ It also makes explicit which of these players has won.*/
 
 void print_score_board(Player p_arr[], int player_count);
 
+
+//This function checks our players to see if any have a score of 3
+bool check_for_winner(Player p_arr[], Player *winner, int player_count);
+
+
+/* -Global Variables-
+ 
+ We want the amount of players, which turn it is, the team colours,
+ whether the game has been won and the board of our game to be global so
+ that we can access these variables anywhere*/
+
+int PLAYER_COUNT, PLAYER_TURN;
+bool GAME_WON = false;
+
 Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS];
 
-int PLAYER_COUNT;
-int PLAYER_TURN;
-
-bool GAME_WON = false;
+//Stores the first letter of each team colour
+int col_chars[6] = {'R', 'B', 'Y', 'G', 'P', 'O'};
 
 int main(int argc, char** argv) {
     
-    //Set up a random number generator (based on time)
+    //Setup for a random number generator (based on time)
     time_t t;
     srand((unsigned) time(&t));
     
-    unsigned int num_players;
+    
+    /* BEGINNING:
+     -> Choosing amount of players
+     -> Choosing team colours
+     -> Placing Tokens on the board */
     
     printf("--Igel Ärgern--\n\n");
     
@@ -45,22 +61,37 @@ int main(int argc, char** argv) {
     
     Player players[PLAYER_COUNT];
     
-    
-    for(int c = 0; c < num_players; c++)
+    //Add players to our player array
+    for(int c = 0; c < PLAYER_COUNT; c++)
     {
         Player new_player;
+        
+        //Team ID is based on index in array
         new_player.player_id = c;
+        
+        //Score at the beginning is set to zero
         new_player.score = 0;
         
         players[c] = new_player;
     }
     
-    
     CHOOSE_COLOURS(PLAYER_COUNT, players, col_chars);
 
+    SETUP_TOKENS(GAME_BOARD, PLAYER_COUNT, players);
     
-    SETUP_TOKENS(PLAYER_COUNT, players);
-    
+    /* PLAYING THE GAME i.e TAKING TURNS:
+     -> A die is rolled giving the player a random number 
+        between 0 and 5 (inclusive)
+     -> The player is given an opportunity to perform
+        a sidestep.
+     -> The player must choose a token on the row of
+        the random rolled number to move forward.
+     
+     This continues until a player wins. When a player wins,
+     our global bool GAME_WON is switched to true and the turns
+     loop ceases.
+     */
+
     int p_turn = 0;
     Player winning_player;
     
@@ -75,22 +106,29 @@ int main(int argc, char** argv) {
         else p_turn++;
     }
     
-    //END OF GAME: PLAYER WINS
-    
-    
-    /*A player wins the game if they reach a score of 3.
-     When someone wins, we congratulate the winner and
+    /* END OF GAME: PLAYER WINS
+     
+     A player wins the game if they reach a score of 3.
+     When someone wins we congratulate the winner and
      print out a scoreboard.
      
      This scoreboard lists every player and their final
-     score. It also makes clear who won the game.
-     */
+     score. It also makes clear who won the game. */
+    
     printf("\n\n\n~THERE IS A WINNER~\n\n"
            "Congratulations To Team ");
     PRINT_COLOUR_LONG(winning_player.team_col);
     
     print_score_board(players, PLAYER_COUNT);
     
+}
+
+//Print Functions
+void print_tile_error(char error[])
+{
+    printf("~You cannot select this tile~\n"
+           "Reason: %s\n", error);
+    printf("TRY AGAIN\n\n");
 }
 
 void print_score_board(Player p_arr[], int player_count)
@@ -105,194 +143,24 @@ void print_score_board(Player p_arr[], int player_count)
         PRINT_COLOUR_LONG(p.team_col);
         printf(" Score: %u", p.score);
         
+        /* If their score is 3, we put a winner
+         tag beside their name */
         if(p.score == 3)
             printf(" *WINNER* ");
         
     }
 }
-//FUNCTIONS TO SET UP THE GAME
-/*void NEW_BOARD()
-{
-    for(int r = 0; r < BOARD_ROWS; r++)
-    {
-        for(int c = 0; c < BOARD_COLS; c++)
-        {
-            Tile new_tile = {false,false, NULL};
-            
-            new_tile.stack_top = push(NONE, new_tile.stack_top);
-            
-            GAME_BOARD[r][c] = new_tile;
-        }
-    }
-    
-    for(int i = 0; i < BOARD_ROWS; i++)
-    {
-        int obstacle_placement = rand() % 7 + 1;
-        
-        GAME_BOARD[i][obstacle_placement].is_obstacle = true;
-    }
-}*/
 
-void SETUP_TOKENS(unsigned int player_count, Player player_arr[])
-{
-    int game_tokens = player_count * 4;
-    int tokens_placed = 0;
-    int turn = 0;
-    int round = 0;
-    
-    int stack_layer = 0;
-    
-    //Give the players their tokens
-    for(int p = 0; p < PLAYER_COUNT; p++)
-    {
-        for(int t = 0; t < TOKENS_PER_PLAYER; t++)
-        {
-            Token new_tkn = {{-1,-1}, player_arr[p].team_col};
-            
-            player_arr[p].p_tokens[t] = new_tkn;
-        }
-    }
-    
-    //Ask players where they want to place their tokens
-    while(tokens_placed < game_tokens)
-    {
-        Player plyr = player_arr[turn];
-        Token tkn = player_arr[turn].p_tokens[round];
-        
-        printf("Player Turn: ");
-        PRINT_COLOUR_LONG(plyr.team_col);
-        
-        printf("\nWhich row would you like to place your token?\n");
-        printf("Enter a number from 0-5\n");
-        
-        int input;
-        scanf("%d", &input);
-        
-        //Check it's a number between 1 and 6
-        if(input < 0 || input > 5)
-        {
-            printf("\nINVALID INPUT, TRY AGAIN\n");
-            continue;
-        }
-        
-        Tile tl = GAME_BOARD[input][0];
-        
-        //If theres one tile left on this layer
-        //and it's the players own colour, they
-        //can place their token on another tile
-        bool viable_tile = tl.stack_count == stack_layer;
-        bool own_token_on_top = tl.stack_top->data == plyr.team_col;
-        
-        
-        //This counts how many viable tiles are
-        //left and if your
-        int viable_tile_count = 0;
-        int own_team_on_top = 0;
-        for(int r = 0; r < BOARD_ROWS; r++)
-        {
-            Tile x = GAME_BOARD[r][0];
-            
-            if(x.stack_count == stack_layer)
-            {
-                viable_tile_count++;
-            }
-            
-            if(x.stack_top->data == plyr.team_col)
-            {
-                own_team_on_top++;
-            }
-        }
-        
-        if(viable_tile_count == own_team_on_top)
-        {
-            viable_tile = true;
-            
-            printf("Your own tokens are on top of every viable tile\n");
-            printf("You must select a tile that isn't on the current stack level");
-        }
-        
-        
-        //if the tile has the right number of tokens on it and the token
-        //on top isn't the current player's token
-        
-        if(viable_tile && !own_token_on_top)
-        {
-            //place token, update coords, put it in token array
-            //increment stack count for tile
-            //update colour on top
-            
-            player_arr[turn].p_tokens[round].coord[0] = input;
-            player_arr[turn].p_tokens[round].coord[1] = 0;
-            player_arr[turn].p_tokens[round].token_col = plyr.team_col;
-            
-            player_arr[turn].p_tokens[round] = tkn;
-            
-            //Push to the stack for this tile
-            GAME_BOARD[input][0].stack_top = push(plyr.team_col, GAME_BOARD[input][0].stack_top);
-            
-            //Increase the stack count
-            GAME_BOARD[input][0].stack_count++;
-            
-            //Change the colour on top of the stack
-            GAME_BOARD[input][0].stack_top->data = plyr.team_col;
-            
-        }
-        else if(!viable_tile && !own_token_on_top)
-        {
-            //ERROR: TOO MANY TOKENS
-            print_tile_error("This tile has too many tokens on it");
-            
-            continue;
-        }
-        else if(viable_tile && own_token_on_top)
-        {
-            //ERROR: OWN TOKEN ON TOP
-            print_tile_error("Your own token is on top");
-            
-            continue;
-        }
-        else
-        {
-            //ERROR: BOTH
-            print_tile_error("Tile has too many tokens AND own token is on top");
-            
-            continue;
-        }
-        
-        
-        //Check if the stack layer needs to be incremented
-        bool keep_stack_level = false;
-        
-        for(int r = 0; r < BOARD_ROWS; r++)
-        {
-            Tile t = GAME_BOARD[r][0];
-            
-            //Is there any tile where we have not reached
-            //the current stack layer yet?
-            if(t.stack_count == stack_layer)
-            {
-                keep_stack_level = true;
-                break;
-            }
-        }
-        
-        print_board(GAME_BOARD);
-        printList(GAME_BOARD[input][0].stack_top);
-        
-        //If every tile has reached the stack layer,
-        //we increment the stack layer
-        if(!keep_stack_level) stack_layer++;
-        
-        if(++turn == player_count) turn = 0; round++; //next round
-        tokens_placed++;
-    }
-}
-
+//Other Functions
 bool check_for_winner(Player p_arr[], Player *winner, int player_count)
 {
     for(int i = 0; i < player_count; i++)
     {
         Player p = p_arr[i];
+        
+        /* For each player, if their score is 3
+           then register this player as the winner
+           and return true */
         
         if(p.score == 3)
         {
@@ -305,47 +173,5 @@ bool check_for_winner(Player p_arr[], Player *winner, int player_count)
     return false;
 }
 
-void print_game_stacks()
-{
-    printf("\n");
-    for(int i = 0; i < BOARD_ROWS; i++)
-    {
-        for(int j = 0; j < BOARD_COLS; j++)
-        {
-            Tile x = GAME_BOARD[i][j];
-            
-            printf("%d ", x.stack_count);
-        }
-        printf("\n");
-    }
-}
 
-void print_tile_error(char error[])
-{
-    printf("~You cannot select this tile~\n");
-    printf("Reason: %s\n", error);
-    printf("TRY AGAIN\n\n");
-}
-
-
-//delete
-void printList(struct stack_elem *currentPtr)
-{
-    /* if list is empty */
-    if ( currentPtr == NULL ) {
-        printf( "List is empty.\n\n" );
-    } /* end if */
-    else {
-        printf( "The list is:\n" );
-        
-        /* while not the end of the list */
-        while ( currentPtr->data != NONE ) {
-            print_colour(currentPtr->data);
-            printf(" ");
-            currentPtr = currentPtr->next;
-        } /* end while */
-        
-        printf( " \n\n" );
-    }
-}
 
