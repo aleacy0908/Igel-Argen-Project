@@ -58,6 +58,7 @@ char print_token(Token t);
 void print_colour(enum COLOUR c);
 void PRINT_COLOUR_LONG(enum COLOUR c);
 
+void REMOVE_OBSTACLES(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS]);
 
 
 

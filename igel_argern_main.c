@@ -46,6 +46,7 @@ int main(int argc, char** argv) {
     Player players[PLAYER_COUNT];
     
     
+    
     for(int c = 0; c < num_players; c++)
     {
         Player new_player;

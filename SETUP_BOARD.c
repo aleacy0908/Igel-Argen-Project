@@ -22,6 +22,46 @@ void NEW_BOARD(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
     }
 }
 
+void REMOVE_OBSTACLE(Tile board[BOARD_ROWS][BOARD_COLS])
+{
+    bool token_found = false;
+    int i = 0;
+    int j = 0;
+    
+    
+    while (i != BOARD_ROWS) {
+        for(int i = 0; i < BOARD_ROWS; i++)
+        {
+            if (token_found == false)
+            {
+                for(int j = 0; j < BOARD_COLS; j++)
+                {
+                    if (board[i][j].stack_top->data != NONE)
+                    {
+                        token_found = true;
+                        break;
+                    }
+                }
+            }
+            else
+                break;
+        }
+        
+        
+        for(int i = 0; i < BOARD_ROWS; i++)
+        {
+            for(int j = 0; j < BOARD_COLS; j++)
+            {
+                if()
+                {
+                    
+                }
+            }
+        }
+    }
+    
+}
+
 void CHOOSE_COLOURS(unsigned int num_players, Player player_arr[], int col_chars[])
 {
     char col_inputs[6][20] = {"R = Red\n","B = Blue\n","Y = Yellow\n","G = Green\n","P = Pink\n","O = Orange\n"};
