@@ -411,3 +411,45 @@ void PRINT_COLOUR_LONG(enum COLOUR c)
             
     }
 }
+
+//Remove an obstacle when there is no token on the left side of an obstacle in a single row
+void REMOVE_OBSTACLE(Tile board[BOARD_ROWS][BOARD_COLS])
+{
+    bool no_token_found = true;
+    int i = 0;
+    int j = 0;
+    
+    //this nested loop will scan the board for a row without any tokens
+    for (i = 0; i < BOARD_ROWS; i++)
+    {
+        //no_token_found is set back to true when the loop moves to the next row
+        no_token_found = true;
+        
+        //BOARD_COLS is iterated to check for any tokens
+        for (j = 0; j < BOARD_COLS; j++)
+        {
+            //when a token is found no_token_found is set to false and the loop is broken
+            if(board[i][j].stack_top->data != NONE)
+            {
+                no_token_found = false;
+                break;
+            }
+        }
+        
+        //if a token is found then this loop is used to find the obstacle and delete it
+        if (no_token_found == true)
+        {
+            //j is set back to 0
+            j = 0;
+            while (j < BOARD_COLS)
+            {
+                //when an obstacle is found, it is set to false which stops it being printed onto the board
+                if (board[i][j].is_obstacle)
+                {
+                    board[i][j].is_obstacle = false;
+                }
+                j++;
+            }
+        }
+    }
+}

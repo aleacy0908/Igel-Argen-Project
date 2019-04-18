@@ -98,8 +98,8 @@ void print_colour(enum COLOUR c);
 //Print the full colour name
 void PRINT_COLOUR_LONG(enum COLOUR c);
 
-
-
+//This function will remove obstacles on rows with no tokens to the left of the obstacle
+void REMOVE_OBSTACLE(Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS]);
 
 
 

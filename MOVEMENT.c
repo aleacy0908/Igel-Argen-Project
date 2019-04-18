@@ -130,6 +130,9 @@ void TAKE_TURN(Player p, Tile GAME_BOARD[BOARD_ROWS][BOARD_COLS])
             }
         }
         
+        //FUNCTION TO REMOVE AN OBSTACLE IS CALLED
+        REMOVE_OBSTACLE(GAME_BOARD);
+        
         print_board(GAME_BOARD);
     }
     
